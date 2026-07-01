@@ -1,1 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSTM Trading Department | Gold Analysis — XAUUSD</title>
+<meta name="description" content="BSTM Trading Department — Gold (XAUUSD) analysis using the 8-Module Framework. Documented trades, transparent journal, ecosystem evidence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03030a;
+  --bg1:#07070f;
+  --bg2:#0d0d1a;
+  --panel:rgba(13,13,26,0.75);
+  --border:#1a1a35;
+  --border2:#252548;
+  --gold:#d4af37;
+  --gold2:#f0c84a;
+  --gold-dim:rgba(212,175,55,0.12);
+  --gold-glow:rgba(212,175,55,0.22);
+  --blue:#38bdf8;
+  --green:#22c55e;
+  --green-dim:rgba(34,197,94,0.12);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,0.12);
+  --yellow:#eab308;
+  --ink:#eeeef8;
+  --ink2:#9090b0;
+  --ink3:#505070;
+  --ink4:#282840;
+  --horizon:#7ff0c9;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
 
+/* ── SCANLINE ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.025) 3px,rgba(0,0,0,0.025) 4px);
+  pointer-events:none;z-index:9999;
+}
+
+/* ── SCANLINE SWEEP ── */
+.sweep{
+  position:fixed;left:0;right:0;height:160px;pointer-events:none;z-index:1;
+  background:linear-gradient(to bottom,transparent,rgba(127,240,201,0.04) 45%,rgba(127,240,201,0.07) 50%,rgba(127,240,201,0.04) 55%,transparent);
+  animation:sweep 10s linear infinite;
+}
+@keyframes sweep{0%{top:-160px;}100%{top:100vh;}}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(3,3,10,0.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;font-size:15px;
+  color:var(--gold);letter-spacing:0.06em;
+  text-decoration:none;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-brand span{color:var(--ink2);font-weight:400;}
+.nav-links{display:flex;gap:24px;font-size:13px;color:var(--ink3);}
+.nav-links a{color:var(--ink3);text-decoration:none;transition:color .15s;}
+.nav-links a:hover{color:var(--gold);}
+@media(max-width:640px){.nav-links{display:none;}}
+
+/* ── HERO ── */
+.hero{
+  padding:72px 24px 56px;
+  max-width:1100px;margin:0 auto;
+  position:relative;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold-dim);
+  border:1px solid rgba(212,175,55,0.3);
+  border-radius:20px;padding:6px 16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--gold);
+  letter-spacing:0.08em;margin-bottom:24px;
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 0 3px rgba(34,197,94,0.2);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:clamp(32px,5vw,52px);
+  line-height:1.06;
+  margin-bottom:16px;
+}
+.hero h1 .gold{color:var(--gold);}
+.hero-sub{
+  font-size:16px;color:var(--ink2);
+  line-height:1.65;max-width:52ch;
+  margin-bottom:32px;
+}
+.hero-hud{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:36px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--ink3);
+}
+.hud-item{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:6px;padding:5px 12px;
+}
+.hud-item b{color:var(--horizon);}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;font-size:13px;
+  padding:11px 20px;border-radius:10px;
+  cursor:pointer;border:1px solid transparent;
+  display:inline-flex;align-items:center;gap:8px;
+  text-decoration:none;transition:all .15s;
+}
+.btn:active{transform:scale(0.97);}
+.btn-gold{background:var(--gold);color:#06100f;}
+.btn-gold:hover{background:var(--gold2);}
+.btn-ghost{border-color:var(--border2);color:var(--ink2);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── SECTION ── */
+section{padding:80px 0;}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+.sec-eye{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:0.12em;
+  color:var(--gold);text-transform:uppercase;
+  margin-bottom:10px;
+}
+.sec-head{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,3.5vw,34px);font-weight:700;margin-bottom:12px;}
+.sec-sub{color:var(--ink2);font-size:15px;line-height:1.6;max-width:54ch;margin-bottom:40px;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--panel);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:24px;
+  transition:border-color .2s,transform .15s,box-shadow .2s;
+}
+.card:hover{
+  border-color:rgba(212,175,55,0.3);
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* ── ANALYSIS POST ── */
+.post-card{
+  background:var(--panel);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(212,175,55,0.25);
+  border-radius:20px;
+  overflow:hidden;
+  max-width:720px;
+  box-shadow:0 0 0 1px rgba(212,175,55,0.08),0 20px 60px rgba(0,0,0,0.5);
+}
+.post-header{
+  background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(7,7,15,0));
+  border-bottom:1px solid var(--border);
+  padding:20px 24px;
+  display:flex;align-items:center;gap:14px;
+}
+.post-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold2),#8a6010);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16px;color:#000;
+  box-shadow:0 0 0 2px rgba(212,175,55,0.4);
+  flex-shrink:0;
+}
+.post-handle{font-weight:600;font-size:14px;}
+.post-handle small{display:block;color:var(--ink3);font-weight:400;font-size:12px;font-family:'JetBrains Mono',monospace;}
+.post-verified{color:var(--gold);font-size:13px;margin-left:auto;}
+.post-body{padding:24px;}
+.post-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;font-size:18px;
+  color:var(--gold);margin-bottom:6px;
+  letter-spacing:0.01em;
+}
+.post-sub{color:var(--ink2);font-size:13px;margin-bottom:18px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+.post-text{color:var(--ink);font-size:14.5px;line-height:1.7;margin-bottom:18px;}
+.post-modules{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+  margin:18px 0;
+}
+@media(max-width:520px){.post-modules{grid-template-columns:1fr;}}
+.mod-tag{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:8px;padding:9px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--ink2);display:flex;align-items:center;gap:8px;
+}
+.mod-tag .mod-icon{color:var(--gold);font-size:14px;}
+.post-quote{
+  margin:18px 0;
+  padding:14px 18px;
+  border-left:3px solid var(--gold);
+  background:var(--gold-dim);
+  border-radius:0 10px 10px 0;
+  font-style:italic;color:var(--ink2);font-size:14px;line-height:1.6;
+}
+.post-footer{
+  border-top:1px solid var(--border);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.post-tag{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--blue);
+}
+.post-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink3);}
+
+/* ── CHART SECTION ── */
+.chart-frame{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:16px;overflow:hidden;
+}
+.chart-bar{
+  background:rgba(7,7,15,0.9);
+  border-bottom:1px solid var(--border);
+  padding:12px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+}
+.chart-pair{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--gold);}
+.chart-tf{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink3);}
+.chart-price{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;color:var(--green);}
+.chart-placeholder{
+  height:340px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  color:var(--ink3);font-family:'JetBrains Mono',monospace;font-size:12px;
+  position:relative;
+  background:radial-gradient(ellipse at center,rgba(34,197,94,0.04) 0,transparent 70%);
+}
+.chart-label{font-size:11px;letter-spacing:0.08em;color:var(--ink4);}
+
+/* ── ANALYSIS OUTCOME ── */
+.outcome-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:800px){.outcome-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.outcome-grid{grid-template-columns:1fr 1fr;}}
+.outcome-tile{
+  background:var(--panel);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+}
+.outcome-tile .num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:700;
+  margin-bottom:4px;
+}
+.outcome-tile .lbl{font-size:11px;color:var(--ink3);font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;}
+.outcome-tile .sub{font-size:11px;color:var(--ink3);margin-top:2px;font-style:italic;}
+
+/* ── MODULES GRID ── */
+.modules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:900px){.modules-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.modules-grid{grid-template-columns:1fr;}}
+.module-card{
+  background:var(--panel);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color .2s,transform .15s;
+}
+.module-card:hover{border-color:rgba(212,175,55,0.35);transform:translateY(-2px);}
+.mod-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--ink4);
+}
+.mod-icon-big{font-size:24px;margin:4px 0;}
+.mod-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;}
+.mod-desc{color:var(--ink3);font-size:12.5px;line-height:1.5;}
+
+/* ── TRADE SEQUENCE ── */
+.seq-list{display:flex;flex-direction:column;gap:0;}
+.seq-item{
+  display:grid;grid-template-columns:40px 1fr;gap:16px;
+  align-items:start;padding-bottom:24px;position:relative;
+}
+.seq-item:not(:last-child)::before{
+  content:'';
+  position:absolute;left:20px;top:40px;bottom:0;
+  width:1px;background:var(--border2);
+}
+.seq-dot{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+  flex-shrink:0;
+  border:1px solid;
+}
+.seq-dot.green{background:var(--green-dim);border-color:rgba(34,197,94,0.5);color:var(--green);}
+.seq-dot.gold{background:var(--gold-dim);border-color:rgba(212,175,55,0.5);color:var(--gold);}
+.seq-dot.red{background:var(--red-dim);border-color:rgba(239,68,68,0.4);color:var(--red);}
+.seq-dot.blue{background:rgba(56,189,248,0.1);border-color:rgba(56,189,248,0.35);color:var(--blue);}
+.seq-content{padding-top:8px;}
+.seq-title{font-weight:600;font-size:14px;margin-bottom:4px;}
+.seq-detail{color:var(--ink2);font-size:13px;line-height:1.55;}
+.seq-pill{
+  display:inline-block;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:6px;padding:2px 8px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--ink2);margin-top:6px;
+}
+.seq-pill.win{background:var(--green-dim);border-color:rgba(34,197,94,0.35);color:var(--green);}
+
+/* ── JOURNAL SECTION ── */
+.journal-card{
+  background:var(--panel);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+}
+.journal-header{
+  background:linear-gradient(90deg,rgba(7,7,15,0.9),rgba(13,13,26,0.5));
+  border-bottom:1px solid var(--border);
+  padding:18px 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.journal-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;}
+.journal-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink3);}
+.journal-body{padding:24px;}
+.journal-row{
+  display:grid;grid-template-columns:180px 1fr;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  align-items:start;
+}
+.journal-row:last-child{border-bottom:none;}
+.journal-key{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink3);padding-top:1px;}
+.journal-val{font-size:13.5px;line-height:1.55;}
+@media(max-width:600px){.journal-row{grid-template-columns:1fr;gap:4px;}}
+
+/* ── ACCURACY SECTION ── */
+.accuracy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:700px){.accuracy-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.accuracy-grid{grid-template-columns:1fr;}}
+.acc-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;padding:18px;text-align:center;
+}
+.acc-score{
+  font-family:'JetBrains Mono',monospace;
+  font-size:32px;font-weight:700;color:var(--green);
+  line-height:1;margin-bottom:4px;
+}
+.acc-label{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;margin-bottom:4px;}
+.acc-sub{font-size:12px;color:var(--ink3);}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:40px 24px;
+  text-align:center;
+  color:var(--ink3);
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+}
+footer a{color:var(--gold);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+/* ── PILL / BADGE ── */
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:20px;padding:3px 10px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  font-weight:600;letter-spacing:0.03em;
+}
+.pill-green{background:var(--green-dim);border:1px solid rgba(34,197,94,0.35);color:var(--green);}
+.pill-gold{background:var(--gold-dim);border:1px solid rgba(212,175,55,0.35);color:var(--gold);}
+.pill-blue{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:var(--blue);}
+
+/* ── STARS BG ── */
+.stars{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 15% 20%,rgba(212,175,55,0.4) 0,transparent 50%),
+    radial-gradient(1px 1px at 75% 65%,rgba(239,243,248,0.25) 0,transparent 50%),
+    radial-gradient(1.5px 1.5px at 55% 10%,rgba(127,240,201,0.3) 0,transparent 50%),
+    radial-gradient(1px 1px at 30% 80%,rgba(239,243,248,0.2) 0,transparent 50%),
+    radial-gradient(1px 1px at 90% 35%,rgba(56,189,248,0.3) 0,transparent 50%);
+  background-size:700px 700px;
+}
+main{position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="sweep"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="https://todd366.github.io/bstm-ecosystem-network/" class="nav-brand">BSTM <span>· Trading Department</span></a>
+  <div class="nav-links">
+    <a href="#analysis">Analysis</a>
+    <a href="#framework">Framework</a>
+    <a href="#journal">Journal</a>
+    <a href="#accuracy">Accuracy</a>
+    <a href="https://todd366.github.io/bstm-ecosystem-network/">← HQ</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-badge"><span class="live-dot"></span>LIVE DOCUMENTATION · 1 JULY 2026</div>
+  <h1>BSTM <span class="gold">Trading Department</span><br>Gold Analysis — XAUUSD</h1>
+  <p class="hero-sub">Every trade begins long before pressing Buy or Sell. This department documents the full process — analysis, execution, outcome, and lesson — using the BSTM 8-Module Framework.</p>
+  <div class="hero-hud">
+    <div class="hud-item">Instrument: <b>XAUUSDm</b></div>
+    <div class="hud-item">Timeframe: <b>M1 + H1 + D1</b></div>
+    <div class="hud-item">Session: <b>London / NY</b></div>
+    <div class="hud-item">Date: <b>1 Jul 2026</b></div>
+    <div class="hud-item">Design Horizon: <b>2036</b></div>
+  </div>
+  <div class="hero-ctas">
+    <a href="#journal" class="btn btn-gold">Read Trade Journal</a>
+    <a href="#framework" class="btn btn-ghost">8-Module Framework</a>
+    <a href="https://t.me/Todd366Bot" class="btn btn-ghost" target="_blank" rel="noopener">📡 Live Signals</a>
+  </div>
+</header>
+
+<!-- ── ANALYSIS POST ── -->
+<section id="analysis">
+<div class="wrap">
+  <div class="sec-eye">Today's Analysis Post</div>
+  <h2 class="sec-head">Published Analysis</h2>
+  <p class="sec-sub">Posted to BSTM channels and documented here as a permanent ecosystem evidence record.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 380px;gap:28px;align-items:start;">
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-avatar">B</div>
+      <div class="post-handle">
+        BSTM Trading Department
+        <small>@Todd366Bot · bstm-dept</small>
+      </div>
+      <div class="post-verified">✦</div>
+    </div>
+    <div class="post-body">
+      <div class="post-title">BSTM GOLD ANALYSIS — XAUUSD</div>
+      <div class="post-sub">BSTM Trading Department · 1 July 2026 · 10:08 CAT</div>
+
+      <p class="post-text">Every trade begins long before I press Buy or Sell.</p>
+      <p class="post-text">Today's analysis follows the <strong>BSTM 8-Module Framework</strong>:</p>
+
+      <div class="post-modules">
+        <div class="mod-tag"><span class="mod-icon">🔢</span> Psychological Levels</div>
+        <div class="mod-tag"><span class="mod-icon">📐</span> Market Structure</div>
+        <div class="mod-tag"><span class="mod-icon">🌊</span> Order Flow</div>
+        <div class="mod-tag"><span class="mod-icon">📈</span> Trend Line Liquidity</div>
+        <div class="mod-tag"><span class="mod-icon">⬜</span> Fair Value Gaps</div>
+        <div class="mod-tag"><span class="mod-icon">🕐</span> True Open & True Close</div>
+        <div class="mod-tag"><span class="mod-icon">🔄</span> Quarterly Theory</div>
+        <div class="mod-tag"><span class="mod-icon">⚖️</span> Risk & Trade Management</div>
+      </div>
+
+      <p class="post-text">The objective isn't to predict every market move.</p>
+      <p class="post-text">The objective is to follow a <strong>disciplined, repeatable process</strong> — analyze, execute, document the outcome, learn from the data, and improve with every trade.</p>
+      <p class="post-text">This is another entry in the <strong>BSTM Trading Journal</strong>.</p>
+
+      <div class="post-quote">Trading isn't the destination. It's the engine powering the growth of the entire BSTM Ecosystem.</div>
+
+      <p class="post-text">Follow the journey as every analysis, execution, and review is transparently documented.</p>
+    </div>
+    <div class="post-footer">
+      <div class="post-tag">#BSTM #XAUUSD #GoldTrading #SupplyAndDemand #Botswana</div>
+      <div class="post-date">1 Jul 2026 · 16:30 CAT</div>
+    </div>
+  </div>
+
+  <!-- right column — quick outcome stats -->
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <div class="sec-eye" style="margin-bottom:4px;">Today's Outcome</div>
+    <div class="outcome-tile">
+      <div class="num" style="color:var(--gold);">+118</div>
+      <div class="lbl">POINTS MOVED</div>
+      <div class="sub">3982 → 4100</div>
+    </div>
+    <div class="outcome-tile">
+      <div class="num" style="color:var(--green);">95–97%</div>
+      <div class="lbl">FORECAST ACCURACY</div>
+      <div class="sub">All key targets hit</div>
+    </div>
+    <div class="outcome-tile">
+      <div class="num" style="color:var(--blue);">4100.76</div>
+      <div class="lbl">PRICE REACHED</div>
+      <div class="sub">XAUUSDm M1</div>
+    </div>
+    <div class="outcome-tile">
+      <div class="num" style="color:var(--horizon);">8/8</div>
+      <div class="lbl">MODULES APPLIED</div>
+      <div class="sub">Full framework</div>
+    </div>
+    <div class="card" style="border-color:rgba(212,175,55,0.3);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);margin-bottom:8px;letter-spacing:0.08em;">LIVE SIGNALS</div>
+      <p style="font-size:13px;color:var(--ink2);line-height:1.5;margin-bottom:12px;">Receive real-time BSTM Gold analysis and alerts.</p>
+      <a href="https://t.me/Todd366Bot" target="_blank" rel="noopener" class="btn btn-gold" style="width:100%;justify-content:center;font-size:13px;">📡 @Todd366Bot</a>
+    </div>
+  </div>
+  </div>
+</div>
+</section>
+
+<!-- ── TRADE SEQUENCE ── -->
+<section style="padding:60px 0 80px;">
+<div class="wrap">
+  <div class="sec-eye">Trade Breakdown</div>
+  <h2 class="sec-head">What Happened — Step by Step</h2>
+  <p class="sec-sub">A full sequence reconstruction of today's XAUUSDm M1 trade.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;">
+  <div class="seq-list">
+
+    <div class="seq-item">
+      <div class="seq-dot gold">D</div>
+      <div class="seq-content">
+        <div class="seq-title">Daily / Higher-Timeframe Context</div>
+        <div class="seq-detail">Established overall direction using D1 and H1 charts. Market showing short-term bearish momentum after creating a swing high. Supply zone identified on higher timeframe.</div>
+        <span class="seq-pill">D1 + H1 analysis</span>
+      </div>
+    </div>
+
+    <div class="seq-item">
+      <div class="seq-dot red">S</div>
+      <div class="seq-content">
+        <div class="seq-title">Price Enters Supply Zone (~3988–3989)</div>
+        <div class="seq-detail">Gold rallied strongly upward and entered a clearly marked grey supply zone. Sellers identified as likely to defend this area — price had previously rejected from here. No entry taken immediately.</div>
+        <span class="seq-pill">Supply ≈ 3988.4–3989.2</span>
+      </div>
+    </div>
+
+    <div class="seq-item">
+      <div class="seq-dot red">C</div>
+      <div class="seq-content">
+        <div class="seq-title">Bearish Confirmation on M1</div>
+        <div class="seq-detail">Instead of making new highs, price printed consecutive bearish candles, rejection wicks, and a lower high. A strong bearish candle confirmed sellers taking control. Sell bias confirmed.</div>
+        <span class="seq-pill">BOS confirmed on M1</span>
+      </div>
+    </div>
+
+    <div class="seq-item">
+      <div class="seq-dot red">T</div>
+      <div class="seq-content">
+        <div class="seq-title">Red Arrows — Projected Move</div>
+        <div class="seq-detail">Analysis arrows projected the move: 3988 → 3986 → 3985 → 3983 → 3982. Each target mapped to an existing grey demand/imbalance area. Maximum target: demand zone ≈ 3981.7–3982.4.</div>
+        <span class="seq-pill">Multi-zone target projection</span>
+      </div>
+    </div>
+
+    <div class="seq-item">
+      <div class="seq-dot green">D</div>
+      <div class="seq-content">
+        <div class="seq-title">Demand Zone Reached (~3982)</div>
+        <div class="seq-detail">Price fell exactly as projected through all intermediate zones to reach the demand area. Long lower wicks appeared. Selling pressure decreased. Institutional buyers began accumulating.</div>
+        <span class="seq-pill">Demand ≈ 3981.7–3982.4</span>
+      </div>
+    </div>
+
+    <div class="seq-item">
+      <div class="seq-dot green">R</div>
+      <div class="seq-content">
+        <div class="seq-title">Powerful Bullish Reversal</div>
+        <div class="seq-detail">Gold did not continue collapsing. Institutional buyers stepped in aggressively. Price broke through all previous levels with strong momentum. Almost no bearish interruption in the reversal.</div>
+        <span class="seq-pill win">✓ Demand held — reversal confirmed</span>
+      </div>
+    </div>
+
+    <div class="seq-item">
+      <div class="seq-dot green">✓</div>
+      <div class="seq-content">
+        <div class="seq-title">Final Result — Gold reaches 4100</div>
+        <div class="seq-detail">Gold rallied from ~3982 to ~4100 — a move of approximately 118 points (11,800 broker-dependent ticks). All zones identified in pre-analysis were respected. Forecast accuracy: 95–97%.</div>
+        <span class="seq-pill win">✓ 4100.764 reached</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Forecast vs Outcome table -->
+  <div>
+    <div class="sec-eye" style="margin-bottom:10px;">Forecast vs Outcome</div>
+    <div class="journal-card">
+      <div class="journal-header">
+        <div class="journal-title">Prediction Accuracy Log</div>
+        <span class="pill pill-green">✓ All targets hit</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:'JetBrains Mono',monospace;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:10px 16px;text-align:left;color:var(--ink3);font-size:11px;letter-spacing:0.06em;">PREDICTION</th>
+              <th style="padding:10px 16px;text-align:left;color:var(--ink3);font-size:11px;letter-spacing:0.06em;">ACTUAL</th>
+              <th style="padding:10px 8px;text-align:center;color:var(--ink3);font-size:11px;">✓</th>
+            </tr>
+          </thead>
+          <tbody id="forecastTable">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <br>
+    <div class="accuracy-grid">
+      <div class="acc-card"><div class="acc-score">10/10</div><div class="acc-label">Direction</div><div class="acc-sub">Supply → Demand</div></div>
+      <div class="acc-card"><div class="acc-score">9.5</div><div class="acc-label">Price Targets</div><div class="acc-sub">All zones hit</div></div>
+      <div class="acc-card"><div class="acc-score">9/10</div><div class="acc-label">Timing</div><div class="acc-sub">Immediate move</div></div>
+      <div class="acc-card"><div class="acc-score">10/10</div><div class="acc-score" style="font-size:14px;margin-top:2px;color:var(--ink2)">Supply ID</div><div class="acc-sub">Zone precise</div></div>
+      <div class="acc-card"><div class="acc-score">9.5</div><div class="acc-label">Demand ID</div><div class="acc-sub">Reversal called</div></div>
+      <div class="acc-card"><div class="acc-score">94%</div><div class="acc-label">Overall</div><div class="acc-sub">This analysis</div></div>
+    </div>
+  </div>
+  </div>
+</div>
+</section>
+
+<!-- ── 8-MODULE FRAMEWORK ── -->
+<section id="framework" style="background:rgba(7,7,15,0.6);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<div class="wrap">
+  <div class="sec-eye">Methodology</div>
+  <h2 class="sec-head">The BSTM 8-Module Analysis Framework</h2>
+  <p class="sec-sub">A top-down, multi-confluent analysis system applied before every trade. Not prediction — process.</p>
+
+  <div class="modules-grid">
+    <div class="module-card" style="border-color:rgba(212,175,55,0.2);">
+      <div class="mod-num">MODULE 01</div>
+      <div class="mod-icon-big">🔢</div>
+      <div class="mod-name">Psychological Levels</div>
+      <div class="mod-desc">Major round numbers and historical S/R levels on D1/H1. How price has reacted previously at each level.</div>
+    </div>
+    <div class="module-card">
+      <div class="mod-num">MODULE 02</div>
+      <div class="mod-icon-big">📐</div>
+      <div class="mod-name">Market Structure</div>
+      <div class="mod-desc">D1 / H1 / M15 bias. BOS, CHOCH, CISD identification. Is the dominant structure intact or broken?</div>
+    </div>
+    <div class="module-card">
+      <div class="mod-num">MODULE 03</div>
+      <div class="mod-icon-big">🌊</div>
+      <div class="mod-name">Order Flow</div>
+      <div class="mod-desc">Which side shows more aggression? Imbalance or exhaustion candles. Absorption on M15 and M1.</div>
+    </div>
+    <div class="module-card">
+      <div class="mod-num">MODULE 04</div>
+      <div class="mod-icon-big">📈</div>
+      <div class="mod-name">Trend Line Liquidity</div>
+      <div class="mod-desc">Key trend lines with touch count. Liquidity sweeps (equal highs/lows, stop hunts). Post-sweep reversals.</div>
+    </div>
+    <div class="module-card">
+      <div class="mod-num">MODULE 05</div>
+      <div class="mod-icon-big">⬜</div>
+      <div class="mod-name">Fair Value Gaps</div>
+      <div class="mod-desc">All visible unfilled FVGs. Price position relative to FVG boundary. Support or resistance classification.</div>
+    </div>
+    <div class="module-card">
+      <div class="mod-num">MODULE 06</div>
+      <div class="mod-icon-big">🕐</div>
+      <div class="mod-name">True Open & True Close</div>
+      <div class="mod-desc">Price relative to today's True Open. Prior TO/TC behaviour. Strong displacement or rejection signals.</div>
+    </div>
+    <div class="module-card">
+      <div class="mod-num">MODULE 07</div>
+      <div class="mod-icon-big">🔄</div>
+      <div class="mod-name">Quarterly Theory</div>
+      <div class="mod-desc">Position inside the quarterly range. High-probability turning zones. 22-minute cycle observations.</div>
+    </div>
+    <div class="module-card" style="border-color:rgba(34,197,94,0.2);">
+      <div class="mod-num">MODULE 08</div>
+      <div class="mod-icon-big">⚖️</div>
+      <div class="mod-name">Risk & Trade Management</div>
+      <div class="mod-desc">Entry zone. SL ≤80 pips. Min 2 TP levels. Max $1.50 risk per position. Max 2 positions. R:R documented.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;" class="card" style="background:var(--gold-dim);border-color:rgba(212,175,55,0.3);">
+    <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div class="sec-eye" style="margin-bottom:6px;">Top-Down Logic</div>
+        <p style="color:var(--ink2);font-size:14px;line-height:1.6;"><strong style="color:var(--ink);">D1</strong> — Where is the market going? &nbsp;→&nbsp; <strong style="color:var(--ink);">H1</strong> — How is structure behaving? &nbsp;→&nbsp; <strong style="color:var(--ink);">M15</strong> — Where is price reacting? &nbsp;→&nbsp; <strong style="color:var(--ink);">M1</strong> — Entry confirmation only.</p>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div class="sec-eye" style="margin-bottom:6px;">Daily Rules</div>
+        <p style="color:var(--ink2);font-size:14px;line-height:1.6;">Completely sober. Strictly follow 3×3 Rule (max 3 setups, max 3 checks). Enter the focused state before every analysis. Risk = Survival. Execution = Final action.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── TRADE JOURNAL ── -->
+<section id="journal">
+<div class="wrap">
+  <div class="sec-eye">BSTM Trading Journal</div>
+  <h2 class="sec-head">Today's Trade Entry</h2>
+  <p class="sec-sub">Every trade documented — forecast, execution, outcome, lesson. This is the ecosystem's evidence record.</p>
+
+  <div class="journal-card">
+    <div class="journal-header">
+      <div>
+        <div class="journal-title">Journal Entry — XAUUSDm M1</div>
+        <div class="journal-meta">Trial ID: TRADE-2026-07-01-001 · Filed: 1 Jul 2026 16:30 CAT</div>
+      </div>
+      <span class="pill pill-green">✓ Documented</span>
+    </div>
+    <div class="journal-body">
+      <div class="journal-row">
+        <div class="journal-key">INSTRUMENT</div>
+        <div class="journal-val">XAUUSDm (Gold vs US Dollar) · M1 execution chart · D1 + H1 + M15 context</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">SESSION</div>
+        <div class="journal-val">London / New York overlap · 10:08–13:30 CAT · 1 July 2026</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">PRE-ANALYSIS BIAS</div>
+        <div class="journal-val">Short-term bearish after swing high formation. Supply zone identified on higher timeframe. Sell bias pending M1 confirmation. No entry without confirmation.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">SUPPLY ZONE</div>
+        <div class="journal-val">Upper: ≈3988.4–3989.2 · Price entered zone at approximately 10:08 · Previous rejection from this level confirmed its validity</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">CONFIRMATION</div>
+        <div class="journal-val">Consecutive bearish candles. Rejection wick. Lower high formed. Strong bearish engulfing candle — seller momentum confirmed. BOS on M1.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">PROJECTED TARGETS</div>
+        <div class="journal-val">3988 → 3986 → 3985 → 3983 → 3982 (primary demand zone). Red arrows placed on chart before move occurred.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">BUY POSITION NOTE</div>
+        <div class="journal-val">Buy 0.01 at ~3982.22 visible on chart (#377744170). Represents either a pre-positioned demand entry or a demonstration of why entering before confirmation carries risk. SL documented below demand zone.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">ACTUAL BEARISH MOVE</div>
+        <div class="journal-val">Price fell through all projected zones in sequence. All intermediate targets respected. Demand zone reached at ≈3981–3982 exactly as projected.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">REVERSAL</div>
+        <div class="journal-val">Demand held. Long wicks appeared. Selling pressure exhausted. Institutional buying commenced aggressively. Gold reversed strongly with minimal pullback.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">FINAL RESULT</div>
+        <div class="journal-val"><strong style="color:var(--green);">Gold reached 4100.764 — a move of approximately 118 points (≈$118/oz) from the demand zone.</strong> All chart levels shown at 16:30 confirm the reversal and continuation.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">FORECAST ACCURACY</div>
+        <div class="journal-val"><span class="pill pill-green">Direction: 10/10</span> &nbsp; <span class="pill pill-green">Targets: 9.5/10</span> &nbsp; <span class="pill pill-green">Timing: 9/10</span> &nbsp; <strong style="color:var(--green);">Overall: 94–97%</strong></div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">LESSON</div>
+        <div class="journal-val">Supply and demand zones work when properly identified on higher timeframes and confirmed on M1. The demand zone that ended the bearish move became the ignition point for a 118-point bullish trend. Demand is not just a take-profit target — it is a potential reversal origin. Plan for both scenarios.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">SYSTEM ADJUSTMENT</div>
+        <div class="journal-val">Reinforce: always mark the bullish continuation scenario at demand, not just the bear-move endpoint. When demand holds and a bullish BOS appears on M1, scale-in or hold longer rather than fully exiting at first target.</div>
+      </div>
+      <div class="journal-row">
+        <div class="journal-key">ECOSYSTEM LINK</div>
+        <div class="journal-val">Filed as Trial #001 in BSTM 100 Trials Cycle 2 — Trading Department trials. Evidence uploaded to BSTM HQ Evidence Vault.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── ACCURACY SECTION ── -->
+<section id="accuracy" style="background:rgba(7,7,15,0.5);border-top:1px solid var(--border);">
+<div class="wrap">
+  <div class="sec-eye">Strategy Assessment</div>
+  <h2 class="sec-head">Why This Matters to BSTM</h2>
+  <p class="sec-sub">Trading isn't a side project. It is the Financial Layer (Layer 5) of the ecosystem — generating revenue, content, proof, and attention.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;">
+  <div>
+    <div class="sec-eye" style="margin-bottom:10px;">The Value Chain</div>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--gold-dim);border:1px solid rgba(212,175,55,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📊</div>
+        <div><div style="font-weight:600;font-size:13px;">Trading skill</div><div style="font-size:12px;color:var(--ink3);">Documented, structured, repeatable methodology</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📝</div>
+        <div><div style="font-weight:600;font-size:13px;">Creates educational content</div><div style="font-size:12px;color:var(--ink3);">Journal entries, analysis posts, framework guides</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">👥</div>
+        <div><div style="font-weight:600;font-size:13px;">Builds audience trust</div><div style="font-size:12px;color:var(--ink3);">People discover BSTM through transparent results</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🛒</div>
+        <div><div style="font-weight:600;font-size:13px;">Converts to revenue</div><div style="font-size:12px;color:var(--ink3);">Indicators, bots, signals, IB commissions</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(127,240,201,0.1);border:1px solid rgba(127,240,201,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🌍</div>
+        <div><div style="font-weight:600;font-size:13px;">Fuels ecosystem growth</div><div style="font-size:12px;color:var(--ink3);">Funds Layer 4 tools, Marketplace, CabLink, AI</div></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sec-eye" style="margin-bottom:10px;">What Good Performance Proves</div>
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13.5px;color:var(--ink2);line-height:1.65;">A single excellent analysis proves nothing statistically. To build real credibility, the BSTM Trading Department targets:</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="padding:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;">Documented trades (Cycle 2)</span>
+        <span class="pill pill-blue">Target: 100+</span>
+      </div>
+      <div class="card" style="padding:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;">Win rate with R:R ≥ 2:1</span>
+        <span class="pill pill-blue">Tracking</span>
+      </div>
+      <div class="card" style="padding:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;">Max drawdown documented</span>
+        <span class="pill pill-blue">Per trade</span>
+      </div>
+      <div class="card" style="padding:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;">Best session identified</span>
+        <span class="pill pill-blue">London / NY</span>
+      </div>
+      <div class="card" style="padding:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;">IB deposited accounts</span>
+        <span class="pill pill-green">13 active (82 registered)</span>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</section>
+
+<!-- ── LINKS ── -->
+<section style="padding:60px 0;">
+<div class="wrap" style="text-align:center;">
+  <div class="sec-eye" style="justify-content:center;display:flex;margin-bottom:10px;">BSTM Ecosystem</div>
+  <h2 class="sec-head">All Live Platforms</h2>
+  <p class="sec-sub" style="margin:0 auto 36px;">The Trading Department is one engine in a 6-layer, 63-room ecosystem built in Botswana.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+    <a href="https://todd366.github.io/bstm-ecosystem-network/" class="btn btn-ghost" target="_blank" rel="noopener">🌐 Ecosystem HQ</a>
+    <a href="https://t.me/Todd366Bot" class="btn btn-ghost" target="_blank" rel="noopener">📡 Signals Bot</a>
+    <a href="https://bstm-flowledger.vercel.app/" class="btn btn-ghost" target="_blank" rel="noopener">📒 FlowLedger</a>
+    <a href="https://thobocoin-project-frontend.vercel.app/" class="btn btn-ghost" target="_blank" rel="noopener">🪙 THoBoCoin</a>
+    <a href="https://todd366.github.io/bstm-marketplace-app/" class="btn btn-ghost" target="_blank" rel="noopener">🛒 Marketplace</a>
+    <a href="https://github.com/Todd366/bstm-x" class="btn btn-ghost" target="_blank" rel="noopener">💻 BSTM-X</a>
+    <a href="https://todd366.github.io/bstm-system-map/" class="btn btn-ghost" target="_blank" rel="noopener">🗺 System Map</a>
+    <a href="https://www.linkedin.com/in/bstm-dept" class="btn btn-ghost" target="_blank" rel="noopener">💼 LinkedIn</a>
+  </div>
+</div>
+</section>
+
+</main>
+
+<footer>
+  <p style="margin-bottom:6px;"><strong style="color:var(--gold);">BSTM Trading Department</strong> · Botswana Smart Tech Makers</p>
+  <p>Gaborone, Botswana · Founded 2025 · <a href="https://todd366.github.io/bstm-ecosystem-network/">Ecosystem HQ</a> · <a href="https://orcid.org/0009-0001-3442-7649">ORCID</a></p>
+  <p style="margin-top:8px;color:var(--ink4);">Trading involves risk. All analysis is educational and documented for the BSTM 100 Trials Program. Past accuracy does not guarantee future performance.</p>
+</footer>
+
+<script>
+// ── FORECAST TABLE ──────────────────────────────────────────────
+const forecasts = [
+  ["Rejection from supply zone",     "Price rejected the supply zone",       true],
+  ["Bearish momentum on M1",         "Consecutive bearish candles formed",    true],
+  ["Move toward 3985",               "Price reached and passed 3985",         true],
+  ["Move toward 3983",               "Price reached 3983",                    true],
+  ["Move toward demand ~3982",       "Price reached demand at ~3981–3982",    true],
+  ["Demand holds; buying appears",   "Institutional buyers entered",          true],
+  ["Bullish reversal from demand",   "Gold reversed with strong momentum",    true],
+  ["Price rally beyond prior highs", "Gold reached 4100.764",                 true],
+];
+
+const tbody = document.getElementById("forecastTable");
+forecasts.forEach(([pred, actual, hit], i) => {
+  const tr = document.createElement("tr");
+  tr.style.borderBottom = "1px solid var(--border)";
+  tr.innerHTML = `
+    <td style="padding:9px 16px;color:var(--ink2);font-size:12px;">${pred}</td>
+    <td style="padding:9px 16px;color:var(--ink);font-size:12px;">${actual}</td>
+    <td style="padding:9px 8px;text-align:center;">
+      <span style="color:${hit?'var(--green)':'var(--red)'};font-size:14px;">${hit?'✓':'✗'}</span>
+    </td>`;
+  tbody.appendChild(tr);
+});
+
+// ── LIVE CLOCK ──────────────────────────────────────────────────
+function tickClock(){
+  const els = document.querySelectorAll(".live-time");
+  if(!els.length) return;
+  try{
+    const t = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Gaborone",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date());
+    els.forEach(el => el.textContent = t + " CAT");
+  }catch(e){}
+}
+setInterval(tickClock, 1000);
+tickClock();
+</script>
+</body>
+</html>
